@@ -17,7 +17,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  String rootedOrJailbreaked = 'Unknown';
   final _rootJailbreakDetectorPlugin = RootJailbreakDetector();
 
   @override
@@ -45,8 +45,8 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion =
-          "Root Kontrolü $root   -    Jailbreak Kontrolü $jailbreak ";
+      rootedOrJailbreaked =
+          "Root Kontrolü $root \nJailbreak Kontrolü $jailbreak ";
     });
   }
 
@@ -55,10 +55,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Root - Jailbreak Detector'),
         ),
         body: Center(
-          child: Text('$_platformVersion\n'),
+          child: Text(rootedOrJailbreaked),
         ),
       ),
     );

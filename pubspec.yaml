@@ -1,6 +1,6 @@
 name: root_jailbreak_detector
-description: A new Flutter plugin project.
-version: 0.0.1
+description: Flutter Root and Jailbreak Detector
+version: 0.5.0
 homepage:
 
 environment:
