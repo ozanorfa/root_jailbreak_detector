@@ -9,6 +9,13 @@ public class SwiftRootJailbreakDetectorPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result("iOS " + UIDevice.current.systemVersion)
+
+    switch call.method {
+        case "getJailbreak":
+            result(true)
+            break
+        default:
+            result(false)
+        }
   }
 }

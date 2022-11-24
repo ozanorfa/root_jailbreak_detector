@@ -19,7 +19,12 @@ abstract class RootJailbreakDetectorPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<Bool?> isRootedOrJailbreaked() {
+  Future<Bool?> isRooted() {
+    throw UnimplementedError(
+        'Root or Jailbreak detector has not been implemented.');
+  }
+
+  Future<Bool?> isJailbreaked() {
     throw UnimplementedError(
         'Root or Jailbreak detector has not been implemented.');
   }

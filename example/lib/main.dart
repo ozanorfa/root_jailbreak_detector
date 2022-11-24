@@ -30,10 +30,9 @@ class _MyAppState extends State<MyApp> {
     bool? jailbreak;
 
     try {
-      root = (await _rootJailbreakDetectorPlugin.isRootedOrJailbreaked() ??
-          false) as bool?;
-      jailbreak = (await _rootJailbreakDetectorPlugin.isRootedOrJailbreaked() ??
-          false) as bool?;
+      root = (await _rootJailbreakDetectorPlugin.isRooted() ?? false) as bool?;
+      jailbreak = (await _rootJailbreakDetectorPlugin.isJailbreaked() ?? false)
+          as bool?;
     } on PlatformException {
       root = false;
       jailbreak = false;

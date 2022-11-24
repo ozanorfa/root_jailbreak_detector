@@ -20,10 +20,10 @@ void main() {
   });
 
   test('getRoot', () async {
-    expect(await platform.isRootedOrJailbreaked(), false);
+    expect(await platform.isRooted(), false);
   });
 
   test('getJailbreak', () async {
-    expect(await platform.isRootedOrJailbreaked(), false);
+    expect(await platform.isJailbreaked(), false);
   });
 }

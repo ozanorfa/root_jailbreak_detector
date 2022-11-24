@@ -10,7 +10,13 @@ class MockRootJailbreakDetectorPlatform
     with MockPlatformInterfaceMixin
     implements RootJailbreakDetectorPlatform {
   @override
-  Future<Bool?> isRootedOrJailbreaked() {
+  Future<Bool?> isJailbreaked() {
+    //return Future.value(false);
+    return Future.value(null);
+  }
+
+  @override
+  Future<Bool?> isRooted() {
     //return Future.value(false);
     return Future.value(null);
   }
@@ -30,7 +36,7 @@ void main() {
         MockRootJailbreakDetectorPlatform();
     RootJailbreakDetectorPlatform.instance = fakePlatform;
 
-    expect(await rootJailbreakDetectorPlugin.isRootedOrJailbreaked(), false);
+    expect(await rootJailbreakDetectorPlugin.isRooted(), false);
   });
 
   test('getJailbreak', () async {
@@ -39,6 +45,6 @@ void main() {
         MockRootJailbreakDetectorPlatform();
     RootJailbreakDetectorPlatform.instance = fakePlatform;
 
-    expect(await rootJailbreakDetectorPlugin.isRootedOrJailbreaked(), false);
+    expect(await rootJailbreakDetectorPlugin.isJailbreaked(), false);
   });
 }
