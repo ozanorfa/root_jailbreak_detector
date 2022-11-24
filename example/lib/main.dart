@@ -42,7 +42,10 @@ class _MyAppState extends State<MyApp> {
         jailbreak =
             (await _rootJailbreakDetectorPlugin.isJailbreaked() ?? false);
       }
-    } on PlatformException {
+    }
+
+    /// You can catch error from native code with [PlatformException]
+    on PlatformException {
       root = false;
       jailbreak = false;
     }

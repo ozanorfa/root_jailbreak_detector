@@ -1,3 +1,7 @@
+## 0.5.2
+
+* Documentation is provided.
+
 ## 0.5.1
 
 * Desciption is changed.
