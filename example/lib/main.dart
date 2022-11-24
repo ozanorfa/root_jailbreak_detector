@@ -18,6 +18,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String rootedOrJailbreaked = 'Unknown';
+
+  ///Initialize Detector
   final _rootJailbreakDetectorPlugin = RootJailbreakDetector();
 
   @override
@@ -31,9 +33,12 @@ class _MyAppState extends State<MyApp> {
     bool? jailbreak;
 
     try {
+      ///Platform check for detection
       if (Platform.isAndroid) {
+        /// isRooted is used to set [root]
         root = (await _rootJailbreakDetectorPlugin.isRooted() ?? false);
       } else if (Platform.isIOS) {
+        /// isJailbreaked is used to set [jailbreak]
         jailbreak =
             (await _rootJailbreakDetectorPlugin.isJailbreaked() ?? false);
       }
