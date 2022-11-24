@@ -7,7 +7,7 @@ Flutter Root(Android) and Jailbreak(iOS) Detector Plugin.
 For Android this plugin uses RootBeer: https://github.com/scottyab/rootbeer <br />
 For iOS this plugin runs Native methods
 
-To install>
+### Install
 ```dart
 $ flutter pub add root_jailbreak_detector
 ```
@@ -16,7 +16,7 @@ This will add a line like this to your package's pubspec.yaml:
 dependencies:
   root_jailbreak_detector: ^0.5.0
   ```
-
+### Usage
 ```dart
 final _rootJailbreakDetectorPlugin = RootJailbreakDetector();
 try {
