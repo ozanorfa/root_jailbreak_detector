@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'root_jailbreak_detector_method_channel.dart';
@@ -19,12 +17,12 @@ abstract class RootJailbreakDetectorPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<Bool?> isRooted() {
+  Future<bool?> isRooted() {
     throw UnimplementedError(
         'Root or Jailbreak detector has not been implemented.');
   }
 
-  Future<Bool?> isJailbreaked() {
+  Future<bool?> isJailbreaked() {
     throw UnimplementedError(
         'Root or Jailbreak detector has not been implemented.');
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
 import 'package:root_jailbreak_detector/root_jailbreak_detector.dart';
@@ -30,9 +31,12 @@ class _MyAppState extends State<MyApp> {
     bool? jailbreak;
 
     try {
-      root = (await _rootJailbreakDetectorPlugin.isRooted() ?? false) as bool?;
-      jailbreak = (await _rootJailbreakDetectorPlugin.isJailbreaked() ?? false)
-          as bool?;
+      if (Platform.isAndroid) {
+        root = (await _rootJailbreakDetectorPlugin.isRooted() ?? false);
+      } else if (Platform.isIOS) {
+        jailbreak =
+            (await _rootJailbreakDetectorPlugin.isJailbreaked() ?? false);
+      }
     } on PlatformException {
       root = false;
       jailbreak = false;
@@ -54,7 +58,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Text('$_platformVersion\n'),
         ),
       ),
     );

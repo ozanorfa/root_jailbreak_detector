@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -10,14 +8,14 @@ class MethodChannelRootJailbreakDetector extends RootJailbreakDetectorPlatform {
   final methodChannel = const MethodChannel('root_jailbreak_detector');
 
   @override
-  Future<Bool?> isRooted() async {
-    final root = await methodChannel.invokeMethod<Bool>('getRoot');
+  Future<bool?> isRooted() async {
+    final root = await methodChannel.invokeMethod<bool>('getRoot');
     return root;
   }
 
   @override
-  Future<Bool?> isJailbreaked() async {
-    final root = await methodChannel.invokeMethod<Bool>('getJailbreak');
+  Future<bool?> isJailbreaked() async {
+    final root = await methodChannel.invokeMethod<bool>('getJailbreak');
     return root;
   }
 }

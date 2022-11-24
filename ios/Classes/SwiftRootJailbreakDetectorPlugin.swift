@@ -12,7 +12,7 @@ public class SwiftRootJailbreakDetectorPlugin: NSObject, FlutterPlugin {
 
     switch call.method {
         case "getJailbreak":
-            result(true)
+        result(DeviceUtils.isDeviceJailBreak())
             break
         default:
             result(false)

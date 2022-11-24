@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:root_jailbreak_detector/root_jailbreak_detector.dart';
 import 'package:root_jailbreak_detector/root_jailbreak_detector_platform_interface.dart';
@@ -10,15 +8,13 @@ class MockRootJailbreakDetectorPlatform
     with MockPlatformInterfaceMixin
     implements RootJailbreakDetectorPlatform {
   @override
-  Future<Bool?> isJailbreaked() {
-    //return Future.value(false);
-    return Future.value(null);
+  Future<bool?> isJailbreaked() {
+    return Future.value(false);
   }
 
   @override
-  Future<Bool?> isRooted() {
-    //return Future.value(false);
-    return Future.value(null);
+  Future<bool?> isRooted() {
+    return Future.value(false);
   }
 }
 
