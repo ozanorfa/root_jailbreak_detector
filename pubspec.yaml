@@ -1,7 +1,7 @@
 name: root_jailbreak_detector
 description: Flutter Root and Jailbreak Detector
 version: 0.5.0
-homepage:
+repository: https://github.com/ozanorfa/root_jailbreak_detector
 
 environment:
   sdk: '>=2.18.4 <3.0.0'

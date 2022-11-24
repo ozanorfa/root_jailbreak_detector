@@ -1,3 +1,3 @@
 ## 0.5.0
 
-* Root and Jailbreak control enabled.
+* Root and Jailbreak control enabled, published.

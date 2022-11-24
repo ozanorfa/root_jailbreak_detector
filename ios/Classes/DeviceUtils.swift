@@ -95,7 +95,6 @@ public extension UIDevice {
                     "/System/Library/LaunchDaemons/com.ikey.bbot.plist",
                     "/System/Library/LaunchDaemons/com.saurik.Cydia.Startup.plist",
                     "/usr/bin/sshd",
-                    //below is contained in emulator
                     "/usr/libexec/sftp-server",
                     "/usr/sbin/sshd",
                     "/etc/apt",
