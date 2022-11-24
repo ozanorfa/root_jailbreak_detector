@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - root_jailbreak_detector (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - root_jailbreak_detector (from `.symlinks/plugins/root_jailbreak_detector/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  root_jailbreak_detector:
+    :path: ".symlinks/plugins/root_jailbreak_detector/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  root_jailbreak_detector: ba5f61565b577cccf2568f3bad41dcd63ac0f6de
+
+PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+
+COCOAPODS: 1.11.3
