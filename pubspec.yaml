@@ -1,6 +1,6 @@
 name: root_jailbreak_detector
 description: Flutter Plugin To Detect Root and Jailbreak on Android-iOS Devices
-version: 0.5.2
+version: 0.5.3
 repository: https://github.com/ozanorfa/root_jailbreak_detector
 
 environment:

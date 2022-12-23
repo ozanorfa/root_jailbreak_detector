@@ -1,3 +1,7 @@
+## 0.5.3
+
+* Small fixes
+
 ## 0.5.2
 
 * Documentation is provided.

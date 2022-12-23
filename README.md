@@ -14,7 +14,7 @@ $ flutter pub add root_jailbreak_detector
 This will add a line like this to your package's pubspec.yaml:
 ```dart
 dependencies:
-  root_jailbreak_detector: ^0.5.2
+  root_jailbreak_detector: ^0.5.3
   ```
   
 ### *Configuration*
