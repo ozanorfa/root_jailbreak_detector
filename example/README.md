@@ -20,5 +20,6 @@ RootBeer flags test-keys images on its own.
 So a red result here proves nothing either way. Run it on a real device to see detection
 actually working — a healthy phone should come back clean.
 
-This app uses the default. To see the opt-out instead, construct the detector with
-`RootJailbreakDetector(treatEmulatorAsCompromised: false)` in [`lib/main.dart`](lib/main.dart).
+The **"Treat emulators as compromised"** switch at the bottom flips
+`RootJailbreakDetector(treatEmulatorAsCompromised: ...)` and re-runs the check, so you can
+watch a simulator move between red and green without editing any code.

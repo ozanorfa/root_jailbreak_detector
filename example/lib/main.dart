@@ -38,11 +38,18 @@ class DeviceIntegrityPage extends StatefulWidget {
 }
 
 class _DeviceIntegrityPageState extends State<DeviceIntegrityPage> {
-  // The detector holds no state, so one const instance is enough.
-  static const _detector = RootJailbreakDetector();
+  /// Toggled from the UI so you can watch a simulator or emulator change
+  /// sides. `true` — the package default — reports emulated environments as
+  /// compromised.
+  bool _treatEmulatorAsCompromised = true;
 
   _Outcome _outcome = _Outcome.checking;
   String? _detail;
+
+  // The detector holds no state, so building one per check costs nothing.
+  RootJailbreakDetector get _detector => RootJailbreakDetector(
+        treatEmulatorAsCompromised: _treatEmulatorAsCompromised,
+      );
 
   @override
   void initState() {
@@ -124,6 +131,26 @@ class _DeviceIntegrityPageState extends State<DeviceIntegrityPage> {
                 onPressed: _outcome == _Outcome.checking ? null : _check,
                 icon: const Icon(Icons.refresh),
                 label: const Text('Check again'),
+              ),
+              const SizedBox(height: 8),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: SwitchListTile(
+                  value: _treatEmulatorAsCompromised,
+                  onChanged: (value) {
+                    setState(() => _treatEmulatorAsCompromised = value);
+                    _check();
+                  },
+                  title: const Text('Treat emulators as compromised'),
+                  subtitle: Text(
+                    _treatEmulatorAsCompromised
+                        ? 'Package default. A simulator or emulator counts as '
+                            'compromised.'
+                        : 'Opted out. A simulator or emulator counts as clean — '
+                            'on Android this also lets a rooted device pass by '
+                            'forging its Build properties.',
+                  ),
+                ),
               ),
             ],
           ),
