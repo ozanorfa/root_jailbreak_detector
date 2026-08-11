@@ -21,10 +21,6 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
     private var context: Context? = null
     private var executor: ExecutorService? = null
 
-    // Only ever touched from the platform thread: the engine callbacks and the
-    // posted replies below all run there, so no synchronisation is needed.
-    private var attached = false
-
     // Created lazily so that constructing the plugin does not touch the Android
     // framework — that keeps it usable from plain JVM unit tests.
     private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
@@ -35,7 +31,6 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
         channel = MethodChannel(binding.binaryMessenger, CHANNEL_NAME).apply {
             setMethodCallHandler(this@RootJailbreakDetectorPlugin)
         }
-        attached = true
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -75,9 +70,10 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
                     }
                 }
                 mainHandler.post {
-                    // A scan already in flight when the engine detaches would
-                    // otherwise reply on a channel that no longer exists.
-                    if (!attached) return@post
+                    // Always answer, including when the engine detached while
+                    // the scan was running. Flutter drops a reply sent to a
+                    // torn-down engine and logs it, whereas staying silent
+                    // would leave any caller still listening waiting forever.
                     outcome.fold(
                         onSuccess = { result.success(it) },
                         onFailure = {
@@ -117,7 +113,6 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
             Build.HARDWARE.contains("ranchu")
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        attached = false
         channel?.setMethodCallHandler(null)
         channel = null
         context = null

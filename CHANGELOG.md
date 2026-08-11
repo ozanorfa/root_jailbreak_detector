@@ -36,8 +36,10 @@ project, and the API made it easy to get a wrong answer.
   `isJailbreaked()` on Android and `isRooted()` on iOS always said "safe".
 * RootBeer no longer runs on the platform thread; it touches the file system and shells out
   looking for `su`.
-* A scan still in flight when the Flutter engine detaches no longer tries to answer on a
-  channel that is already gone.
+* Detaching from the engine shuts the scan executor down immediately instead of letting queued
+  work run on with nowhere to report back to. A scan already in flight still answers: Flutter
+  discards a reply aimed at a torn-down engine, whereas staying silent could leave a caller
+  waiting on a future that never completes.
 * The published archive was 13 MB of build artifacts because the package had no `.gitignore`.
 
 ### Added
