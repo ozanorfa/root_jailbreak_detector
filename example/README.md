@@ -1,16 +1,15 @@
 # root_jailbreak_detector_example
 
-Demonstrates how to use the root_jailbreak_detector plugin.
+Demonstrates `root_jailbreak_detector` on a device.
 
-## Getting Started
+The app runs a check on startup and shows one of four outcomes — clean, compromised, unknown
+(the check failed), or unsupported platform — with a button to run it again. See
+[`lib/main.dart`](lib/main.dart) for the recommended calling pattern.
 
-This project is a starting point for a Flutter application.
+```console
+$ flutter run                      # on a connected device or simulator
+$ flutter test                     # widget tests, with the native side mocked
+$ flutter test integration_test    # exercises the real native code
+```
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A simulator or emulator is never reported as compromised, so expect a clean result there.
