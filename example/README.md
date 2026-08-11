@@ -12,10 +12,10 @@ $ flutter test                     # widget tests, with the native side mocked
 $ flutter test integration_test    # exercises the real native code
 ```
 
-Simulators and emulators are not a substitute for a real device:
+On a simulator or emulator the app shows **"Device appears rooted or jailbroken"**. That is
+the intended answer, not a bug — an emulated environment is not one whose integrity the
+package will vouch for. iOS reports the simulator as compromised outright; on Android,
+RootBeer flags test-keys images on its own.
 
-- the **iOS simulator** always reports clean — detection is skipped there entirely, so a green
-  result says nothing about whether the checks work
-- **Android emulators** are *not* skipped. Images built with test-keys (AOSP and "Google APIs"
-  system images) are normally reported as rooted, which is accurate rather than a false
-  positive. "Google Play" images usually come back clean.
+So a red result here proves nothing either way. Run it on a real device to see detection
+actually working — a healthy phone should come back clean.

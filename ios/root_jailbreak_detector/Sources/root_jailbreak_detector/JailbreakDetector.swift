@@ -12,9 +12,20 @@ enum JailbreakDetector {
 
   /// Whether the current device shows signs of being jailbroken.
   static func isDeviceJailbroken() -> Bool {
-    // The simulator has a writable file system and ships binaries that look
-    // suspicious to the checks below, so it would be flagged on every run.
-    if isSimulator { return false }
+    // A simulator is reported as compromised rather than exempted. It is a
+    // macOS process on a writable filesystem, usually with a debugger
+    // attached, so there is no device integrity here to vouch for — and
+    // "nobody can get a build in here" is an assumption, not a guarantee.
+    // Android answers the same way: RootBeer sees an emulator for what it is.
+    //
+    // This is deliberately a fixed answer rather than letting the checks below
+    // run, which would otherwise key off whatever macOS happens to have on
+    // disk (`/bin/bash` and friends) and report a jailbreak for the wrong
+    // reason.
+    //
+    // Apps that need a usable simulator while developing should skip the call
+    // behind `kDebugMode` rather than have this package misreport the device.
+    if isSimulator { return true }
 
     return hasSuspiciousFiles()
       || hasSuspiciousURLSchemes()

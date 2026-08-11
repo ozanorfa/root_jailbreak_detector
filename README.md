@@ -143,16 +143,22 @@ dangerous system properties, writable system paths, test-keys builds, and a nati
 
 ### Simulators and emulators
 
-The **iOS simulator** is never reported as jailbroken. It runs as a macOS process on a normal
-writable filesystem, so the checks above would fire on every run — detection is skipped there
-rather than producing a meaningless answer.
+Both are reported as **compromised**, and that is the intended answer rather than a false
+positive. An emulated environment runs on a writable filesystem, usually under a debugger,
+with none of the guarantees the checks above exist to verify — there is no device integrity
+here to vouch for. iOS returns a fixed `true` for the simulator; on Android, RootBeer reaches
+the same conclusion by itself on test-keys images (AOSP and "Google APIs" system images).
 
-**Android emulators get no such exemption.** RootBeer inspects them like any other device, and
-images built with test-keys — AOSP and "Google APIs" system images — are normally reported as
-rooted. That is a correct answer, not a false positive: an emulator really is an environment
-your app cannot trust. Exempting them would also hand an attacker a free bypass.
+The practical consequence: **expect a positive result while developing.** If you need the
+check out of the way locally, skip it explicitly rather than having the package misreport the
+device:
 
-Test on real hardware before trusting either result.
+```dart
+final flagged = kDebugMode ? false : await detector.isCompromisedOrElse(true);
+```
+
+It also means a simulator or emulator cannot tell you whether detection *works*. Only a real
+device can.
 
 ## Migrating from 0.5.x
 
