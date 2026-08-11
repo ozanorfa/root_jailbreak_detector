@@ -200,6 +200,9 @@ final flagged = await detector.isCompromisedOrElse(true);
 
 Other 1.0.0 changes:
 
+- the iOS simulator now reports as compromised, reversing the exemption 0.5.4 added. This is
+  the first thing you will notice after upgrading — see
+  [Simulators and emulators](#simulators-and-emulators) for the two ways to unblock your team
 - minimum Flutter 3.44, Android `minSdk` 16 → 24, iOS 9 → 13
 - Android is built with the Gradle Kotlin DSL and declares a `namespace`, which is required
   by AGP 8+ — 0.5.x fails to build in any recent Flutter project

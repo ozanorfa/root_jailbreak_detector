@@ -13,8 +13,9 @@ project, and the API made it easy to get a wrong answer.
   pushed into writing `?? false` and quietly defaulting to "safe".
 * `isCompromised()` throws `RootJailbreakDetectorException` when a check cannot run, instead
   of reporting the device as clean.
-* `RootJailbreakDetectorPlatform` now exposes a single `isDeviceCompromised()` plus
-  `isSupported`. Custom platform implementations need updating.
+* `RootJailbreakDetectorPlatform` now exposes a single
+  `isDeviceCompromised({bool treatEmulatorAsCompromised})` plus `isSupported`. Custom platform
+  implementations need updating.
 * Minimum versions raised: Flutter 3.44, Android `minSdk` 24, iOS 13. The Android module
   and `Package.swift` track the Flutter 3.44 plugin template, so that is the floor the
   package is built and tested against.
@@ -46,6 +47,10 @@ project, and the API made it easy to get a wrong answer.
   throw, so `catchError` callers see it too; `isCompromisedOrElse()` absorbs *any* error, so
   an incomplete custom platform implementation cannot break its never-throws contract.
 * `isSupported`, to tell "checked and clean" apart from "never checked".
+* `RootJailbreakDetector(treatEmulatorAsCompromised: false)`, to opt out of counting a
+  simulator or emulator as compromised. On Android the exemption reads `Build` properties,
+  which a rooted device can forge, so the README explains when this is the right lever and
+  when gating the call on `kDebugMode` costs less.
 * Swift Package Manager support alongside CocoaPods, plus a privacy manifest.
 * iOS: detection of injected libraries via the dyld image list, which catches runtime hooking
   that leaves no trace on disk.
