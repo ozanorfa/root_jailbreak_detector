@@ -12,4 +12,10 @@ $ flutter test                     # widget tests, with the native side mocked
 $ flutter test integration_test    # exercises the real native code
 ```
 
-A simulator or emulator is never reported as compromised, so expect a clean result there.
+Simulators and emulators are not a substitute for a real device:
+
+- the **iOS simulator** always reports clean — detection is skipped there entirely, so a green
+  result says nothing about whether the checks work
+- **Android emulators** are *not* skipped. Images built with test-keys (AOSP and "Google APIs"
+  system images) are normally reported as rooted, which is accurate rather than a false
+  positive. "Google Play" images usually come back clean.

@@ -141,7 +141,18 @@ dangerous system properties, writable system paths, test-keys builds, and a nati
   keep the root filesystem read-only, so this one only fires on rootful jailbreaks; the
   `/var/jb` path check covers the rootless case
 
-The simulator is never reported as jailbroken.
+### Simulators and emulators
+
+The **iOS simulator** is never reported as jailbroken. It runs as a macOS process on a normal
+writable filesystem, so the checks above would fire on every run — detection is skipped there
+rather than producing a meaningless answer.
+
+**Android emulators get no such exemption.** RootBeer inspects them like any other device, and
+images built with test-keys — AOSP and "Google APIs" system images — are normally reported as
+rooted. That is a correct answer, not a false positive: an emulator really is an environment
+your app cannot trust. Exempting them would also hand an attacker a free bypass.
+
+Test on real hardware before trusting either result.
 
 ## Migrating from 0.5.x
 
