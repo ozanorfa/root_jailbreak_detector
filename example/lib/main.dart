@@ -144,8 +144,9 @@ class _DeviceIntegrityPageState extends State<DeviceIntegrityPage> {
                   title: const Text('Treat emulators as compromised'),
                   subtitle: Text(
                     _treatEmulatorAsCompromised
-                        ? 'Package default. A simulator or emulator counts as '
-                            'compromised.'
+                        ? 'Package default. The iOS simulator always counts as '
+                            'compromised; on Android it is RootBeer that '
+                            'decides, so a Google Play image may pass.'
                         : 'Opted out. A simulator or emulator counts as clean — '
                             'on Android this also lets a rooted device pass by '
                             'forging its Build properties.',

@@ -62,7 +62,8 @@ project, and the API made it easy to get a wrong answer.
 
 * A simulator or emulator is now reported as compromised by default. 0.5.4 had exempted the
   iOS simulator, but that exemption rested on an assumption about what can be run there, and
-  it left the two platforms disagreeing — Android emulators were already being flagged.
+  it left the two platforms disagreeing — Android emulators running a test-keys image were
+  already being flagged.
   `RootJailbreakDetector(treatEmulatorAsCompromised: false)` opts out on both platforms; the
   README explains why gating the call on `kDebugMode` is usually the better trade.
 * RootBeer 0.1.0 → 0.1.1.

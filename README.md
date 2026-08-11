@@ -120,10 +120,10 @@ if (!detector.isSupported) {
 
 | Member | Description |
 | --- | --- |
+| `RootJailbreakDetector({bool treatEmulatorAsCompromised = true})` | Constructor. `treatEmulatorAsCompromised` decides whether the iOS simulator and Android emulators count as compromised — read [Simulators and emulators](#simulators-and-emulators) before turning it off. |
 | `isCompromised()` | `Future<bool>` — fails with `RootJailbreakDetectorException` when the check cannot run. Failures always arrive as a failed future, never as a synchronous throw, so `await` and `catchError` both see them. |
 | `isCompromisedOrElse(bool fallback)` | Never throws. Returns `fallback` on *any* error. |
 | `isSupported` | Whether detection applies on the current platform. |
-| `RootJailbreakDetector({bool treatEmulatorAsCompromised = true})` | Whether the iOS simulator and Android emulators count as compromised. See [Simulators and emulators](#simulators-and-emulators) before turning it off. |
 
 ## What gets checked
 
@@ -144,14 +144,19 @@ dangerous system properties, writable system paths, test-keys builds, and a nati
 
 ### Simulators and emulators
 
-Both are reported as **compromised**, and that is the intended answer rather than a false
-positive. An emulated environment runs on a writable filesystem, usually under a debugger,
-with none of the guarantees the checks above exist to verify — there is no device integrity
-here to vouch for. iOS returns a fixed `true` for the simulator; on Android, RootBeer reaches
-the same conclusion by itself on test-keys images (AOSP and "Google APIs" system images).
+By default an emulated environment counts as **compromised**, and that is the intended answer
+rather than a false positive: it runs on a writable filesystem, usually under a debugger, with
+none of the guarantees the checks above exist to verify.
 
-The practical consequence: **expect a positive result while developing.** If that gets in the
-way, say so explicitly:
+The two platforms reach that answer differently, and the results are not identical:
+
+- **iOS** returns a fixed `true` for the simulator, so it is always flagged.
+- **Android** leaves the question to RootBeer. Test-keys images (AOSP and "Google APIs") are
+  normally flagged, but a "Google Play" image often comes back clean — so an Android emulator
+  may well be green even on the default.
+
+The practical consequence: **expect a positive result while developing**, reliably on iOS and
+sometimes on Android. If that gets in the way, say so explicitly:
 
 ```dart
 const detector = RootJailbreakDetector(treatEmulatorAsCompromised: false);

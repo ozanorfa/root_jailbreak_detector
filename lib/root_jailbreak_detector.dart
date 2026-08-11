@@ -33,8 +33,10 @@ class RootJailbreakDetector {
   /// exist to verify — so the honest answer is that its integrity cannot be
   /// vouched for.
   ///
-  /// The cost is that your own team sees a positive result whenever they run in
-  /// a simulator or emulator. Pass `false` to opt out of that.
+  /// The cost is that your own team sees a positive result while developing —
+  /// always on the iOS simulator, and on Android whenever RootBeer flags the
+  /// system image (test-keys builds do, "Google Play" images usually do not).
+  /// Pass `false` to opt out of that.
   ///
   /// Weigh it first: on Android the exemption rests on `Build` properties,
   /// which a rooted device can forge, so `false` also hands a real attacker a
