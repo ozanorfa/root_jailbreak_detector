@@ -123,6 +123,7 @@ if (!detector.isSupported) {
 | `isCompromised()` | `Future<bool>` — fails with `RootJailbreakDetectorException` when the check cannot run. Failures always arrive as a failed future, never as a synchronous throw, so `await` and `catchError` both see them. |
 | `isCompromisedOrElse(bool fallback)` | Never throws. Returns `fallback` on *any* error. |
 | `isSupported` | Whether detection applies on the current platform. |
+| `RootJailbreakDetector({bool treatEmulatorAsCompromised = true})` | Whether the iOS simulator and Android emulators count as compromised. See [Simulators and emulators](#simulators-and-emulators) before turning it off. |
 
 ## What gets checked
 
@@ -149,15 +150,23 @@ with none of the guarantees the checks above exist to verify — there is no dev
 here to vouch for. iOS returns a fixed `true` for the simulator; on Android, RootBeer reaches
 the same conclusion by itself on test-keys images (AOSP and "Google APIs" system images).
 
-The practical consequence: **expect a positive result while developing.** If you need the
-check out of the way locally, skip it explicitly rather than having the package misreport the
-device:
+The practical consequence: **expect a positive result while developing.** If that gets in the
+way, say so explicitly:
+
+```dart
+const detector = RootJailbreakDetector(treatEmulatorAsCompromised: false);
+```
+
+Weigh that first. On Android the exemption reads `Build` properties, which a rooted device can
+forge — so `false` also gives a real attacker a way to look like an emulator and skip the check
+entirely. If all you need is your own development builds unblocked, leave the default alone and
+skip the call instead, which gives up nothing in production:
 
 ```dart
 final flagged = kDebugMode ? false : await detector.isCompromisedOrElse(true);
 ```
 
-It also means a simulator or emulator cannot tell you whether detection *works*. Only a real
+Either way, a simulator or emulator cannot tell you whether detection *works*. Only a real
 device can.
 
 ## Migrating from 0.5.x

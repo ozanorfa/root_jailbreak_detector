@@ -1,6 +1,7 @@
 package com.ozanorfa.rootjailbreakdetector.root_jailbreak_detector
 
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import com.scottyab.rootbeer.RootBeer
@@ -39,7 +40,11 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-            METHOD_IS_DEVICE_COMPROMISED -> detectRoot(result)
+            METHOD_IS_DEVICE_COMPROMISED -> detectRoot(
+                result,
+                // Absent or malformed arguments fall back to the stricter answer.
+                treatEmulatorAsCompromised = call.argument<Boolean>(ARG_TREAT_EMULATOR) ?: true,
+            )
             // Anything else is a bug on the Dart side. Reporting `false` here
             // would look exactly like "this device is clean".
             else -> result.notImplemented()
@@ -50,7 +55,7 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
      * RootBeer touches the file system and shells out looking for `su`, so it
      * must not run on the platform thread.
      */
-    private fun detectRoot(result: Result) {
+    private fun detectRoot(result: Result, treatEmulatorAsCompromised: Boolean) {
         val executor = this.executor
         val context = this.context
         if (executor == null || context == null) {
@@ -60,7 +65,15 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
 
         try {
             executor.execute {
-                val outcome = runCatching { RootBeer(context).isRooted }
+                val outcome = runCatching {
+                    // RootBeer rightly reports an emulator as rooted, so the
+                    // opt-out has to be applied before asking it.
+                    if (!treatEmulatorAsCompromised && isProbablyEmulator()) {
+                        false
+                    } else {
+                        RootBeer(context).isRooted
+                    }
+                }
                 mainHandler.post {
                     // A scan already in flight when the engine detaches would
                     // otherwise reply on a channel that no longer exists.
@@ -82,6 +95,27 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
+    /**
+     * Best-effort emulator recognition, consulted only to honour
+     * `treatEmulatorAsCompromised = false`.
+     *
+     * These are `Build` properties, which a rooted device can forge — which is
+     * exactly why the exemption is opt-in rather than the default.
+     */
+    private fun isProbablyEmulator(): Boolean =
+        Build.FINGERPRINT.startsWith("generic") ||
+            Build.FINGERPRINT.startsWith("unknown") ||
+            Build.FINGERPRINT.contains("emulator", ignoreCase = true) ||
+            Build.MODEL.contains("google_sdk") ||
+            Build.MODEL.contains("Emulator") ||
+            Build.MODEL.contains("Android SDK built for") ||
+            Build.MANUFACTURER.contains("Genymotion") ||
+            (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")) ||
+            Build.PRODUCT == "google_sdk" ||
+            Build.PRODUCT.startsWith("sdk_gphone") ||
+            Build.HARDWARE.contains("goldfish") ||
+            Build.HARDWARE.contains("ranchu")
+
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         attached = false
         channel?.setMethodCallHandler(null)
@@ -96,6 +130,7 @@ class RootJailbreakDetectorPlugin : FlutterPlugin, MethodCallHandler {
     private companion object {
         const val CHANNEL_NAME = "root_jailbreak_detector"
         const val METHOD_IS_DEVICE_COMPROMISED = "isDeviceCompromised"
+        const val ARG_TREAT_EMULATOR = "treatEmulatorAsCompromised"
         const val ERROR_UNAVAILABLE = "unavailable"
         const val ERROR_CHECK_FAILED = "check-failed"
     }

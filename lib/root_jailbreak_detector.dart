@@ -24,7 +24,28 @@ export 'src/root_jailbreak_detector_exception.dart';
 class RootJailbreakDetector {
   /// Creates a detector. The class holds no state, so a `const` instance is
   /// fine to share across your app.
-  const RootJailbreakDetector();
+  const RootJailbreakDetector({this.treatEmulatorAsCompromised = true});
+
+  /// Whether the iOS simulator and Android emulators count as compromised.
+  ///
+  /// Defaults to `true`. An emulated environment runs on a writable filesystem,
+  /// usually under a debugger, and offers none of the guarantees these checks
+  /// exist to verify — so the honest answer is that its integrity cannot be
+  /// vouched for.
+  ///
+  /// The cost is that your own team sees a positive result whenever they run in
+  /// a simulator or emulator. Pass `false` to opt out of that.
+  ///
+  /// Weigh it first: on Android the exemption rests on `Build` properties,
+  /// which a rooted device can forge, so `false` also hands a real attacker a
+  /// way to look like an emulator and skip the check entirely. If you only want
+  /// your development builds unblocked, prefer leaving this alone and skipping
+  /// the call instead:
+  ///
+  /// ```dart
+  /// final flagged = kDebugMode ? false : await detector.isCompromisedOrElse(true);
+  /// ```
+  final bool treatEmulatorAsCompromised;
 
   static RootJailbreakDetectorPlatform get _platform =>
       RootJailbreakDetectorPlatform.instance;
@@ -51,7 +72,9 @@ class RootJailbreakDetector {
   // Hence `async`: it converts a platform implementation that throws
   // synchronously — as the unimplemented base class does — into a failed
   // future, so `catchError` callers see it too.
-  Future<bool> isCompromised() async => _platform.isDeviceCompromised();
+  Future<bool> isCompromised() async => _platform.isDeviceCompromised(
+        treatEmulatorAsCompromised: treatEmulatorAsCompromised,
+      );
 
   /// Like [isCompromised], but returns [fallback] instead of throwing when the
   /// check cannot be completed.

@@ -42,6 +42,21 @@ void main() {
     expect(calls.single.method, 'isDeviceCompromised');
   });
 
+  test('sends treatEmulatorAsCompromised to the native side', () async {
+    final calls = <MethodCall>[];
+    mockNativeSide((call) {
+      calls.add(call);
+      return false;
+    });
+
+    await platform.isDeviceCompromised();
+    expect(calls.single.arguments, {'treatEmulatorAsCompromised': true});
+
+    calls.clear();
+    await platform.isDeviceCompromised(treatEmulatorAsCompromised: false);
+    expect(calls.single.arguments, {'treatEmulatorAsCompromised': false});
+  });
+
   test('passes the native result through', () async {
     mockNativeSide((_) => true);
     expect(await platform.isDeviceCompromised(), isTrue);

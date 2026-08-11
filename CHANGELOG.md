@@ -55,11 +55,11 @@ project, and the API made it easy to get a wrong answer.
 
 ### Changed
 
-* A simulator or emulator is now reported as compromised. 0.5.4 had exempted the iOS
-  simulator, but that exemption rested on an assumption about what can be run there, and it
-  left the two platforms disagreeing — Android emulators were already being flagged. Expect a
-  positive result while developing, and skip the call behind `kDebugMode` if it gets in the
-  way, rather than having the package misreport the device.
+* A simulator or emulator is now reported as compromised by default. 0.5.4 had exempted the
+  iOS simulator, but that exemption rested on an assumption about what can be run there, and
+  it left the two platforms disagreeing — Android emulators were already being flagged.
+  `RootJailbreakDetector(treatEmulatorAsCompromised: false)` opts out on both platforms; the
+  README explains why gating the call on `kDebugMode` is usually the better trade.
 * RootBeer 0.1.0 → 0.1.1.
 * The iOS `UIDevice.isJailBroken` extension is gone. It was `public`, so it leaked onto
   `UIDevice` for every app that imported the plugin.

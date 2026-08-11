@@ -20,11 +20,17 @@ class _FakeDetectorPlatform extends RootJailbreakDetectorPlatform {
   final bool? _result;
   final RootJailbreakDetectorException? _error;
 
+  /// What the facade last asked for, so the test can assert it was forwarded.
+  bool? lastTreatEmulatorAsCompromised;
+
   @override
   bool get isSupported => true;
 
   @override
-  Future<bool> isDeviceCompromised() async {
+  Future<bool> isDeviceCompromised({
+    bool treatEmulatorAsCompromised = true,
+  }) async {
+    lastTreatEmulatorAsCompromised = treatEmulatorAsCompromised;
     final error = _error;
     if (error != null) throw error;
     return _result!;
@@ -73,6 +79,27 @@ void main() {
         detector.isCompromised(),
         throwsA(isA<RootJailbreakDetectorException>()),
       );
+    });
+  });
+
+  group('treatEmulatorAsCompromised', () {
+    test('defaults to treating an emulator as compromised', () async {
+      final fake = _FakeDetectorPlatform.answers(false);
+      RootJailbreakDetectorPlatform.instance = fake;
+
+      await const RootJailbreakDetector().isCompromised();
+
+      expect(fake.lastTreatEmulatorAsCompromised, isTrue);
+    });
+
+    test('forwards an opt-out to the platform', () async {
+      final fake = _FakeDetectorPlatform.answers(false);
+      RootJailbreakDetectorPlatform.instance = fake;
+
+      await const RootJailbreakDetector(treatEmulatorAsCompromised: false)
+          .isCompromised();
+
+      expect(fake.lastTreatEmulatorAsCompromised, isFalse);
     });
   });
 

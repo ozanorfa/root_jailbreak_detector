@@ -11,21 +11,15 @@ import UIKit
 enum JailbreakDetector {
 
   /// Whether the current device shows signs of being jailbroken.
-  static func isDeviceJailbroken() -> Bool {
-    // A simulator is reported as compromised rather than exempted. It is a
-    // macOS process on a writable filesystem, usually with a debugger
-    // attached, so there is no device integrity here to vouch for — and
-    // "nobody can get a build in here" is an assumption, not a guarantee.
-    // Android answers the same way: RootBeer sees an emulator for what it is.
-    //
-    // This is deliberately a fixed answer rather than letting the checks below
-    // run, which would otherwise key off whatever macOS happens to have on
-    // disk (`/bin/bash` and friends) and report a jailbreak for the wrong
-    // reason.
-    //
-    // Apps that need a usable simulator while developing should skip the call
-    // behind `kDebugMode` rather than have this package misreport the device.
-    if isSimulator { return true }
+  ///
+  /// The simulator answers with `treatSimulatorAsCompromised` rather than
+  /// running the checks below. It is a macOS process on a writable filesystem,
+  /// usually with a debugger attached, so there is no device integrity to
+  /// vouch for — but the checks would key off whatever macOS happens to have
+  /// on disk (`/bin/bash` and friends) and report a jailbreak for the wrong
+  /// reason, so the answer is fixed rather than measured.
+  static func isDeviceJailbroken(treatSimulatorAsCompromised: Bool) -> Bool {
+    if isSimulator { return treatSimulatorAsCompromised }
 
     return hasSuspiciousFiles()
       || hasSuspiciousURLSchemes()

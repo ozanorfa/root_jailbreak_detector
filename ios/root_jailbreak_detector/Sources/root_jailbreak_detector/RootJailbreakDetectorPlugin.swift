@@ -17,10 +17,19 @@ public class RootJailbreakDetectorPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case Self.isDeviceCompromisedMethod:
+      // Absent or malformed arguments fall back to the stricter answer.
+      let arguments = call.arguments as? [String: Any]
+      let treatSimulatorAsCompromised =
+        arguments?["treatEmulatorAsCompromised"] as? Bool ?? true
+
       // The checks are cheap (file lookups and an in-memory dyld scan) and
       // `canOpenURL` has to run on the main thread anyway, so this stays
       // synchronous on the platform thread.
-      result(JailbreakDetector.isDeviceJailbroken())
+      result(
+        JailbreakDetector.isDeviceJailbroken(
+          treatSimulatorAsCompromised: treatSimulatorAsCompromised
+        )
+      )
     default:
       // Never answer `false` here — the Dart side cannot tell that apart from
       // a genuine "this device is clean".

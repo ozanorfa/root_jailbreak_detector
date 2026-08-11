@@ -35,10 +35,13 @@ abstract class RootJailbreakDetectorPlatform extends PlatformInterface {
 
   /// Whether the device shows signs of being rooted or jailbroken.
   ///
+  /// When [treatEmulatorAsCompromised] is `false`, an implementation that can
+  /// recognise a simulator or emulator should report it as clean.
+  ///
   /// Implementations must throw a [RootJailbreakDetectorException] when the
   /// check cannot be completed. Returning `false` on failure would report a
   /// possibly compromised device as safe.
-  Future<bool> isDeviceCompromised() {
+  Future<bool> isDeviceCompromised({bool treatEmulatorAsCompromised = true}) {
     throw UnimplementedError('isDeviceCompromised() has not been implemented.');
   }
 }

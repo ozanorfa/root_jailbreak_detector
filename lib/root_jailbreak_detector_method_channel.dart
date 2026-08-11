@@ -22,12 +22,16 @@ class MethodChannelRootJailbreakDetector extends RootJailbreakDetectorPlatform {
   }
 
   @override
-  Future<bool> isDeviceCompromised() async {
+  Future<bool> isDeviceCompromised({bool treatEmulatorAsCompromised = true}) async {
     if (!isSupported) return false;
 
     try {
-      final compromised =
-          await methodChannel.invokeMethod<bool>('isDeviceCompromised');
+      final compromised = await methodChannel.invokeMethod<bool>(
+        'isDeviceCompromised',
+        <String, Object?>{
+          'treatEmulatorAsCompromised': treatEmulatorAsCompromised,
+        },
+      );
       if (compromised == null) {
         throw const RootJailbreakDetectorException(
           'The native side returned no result.',
