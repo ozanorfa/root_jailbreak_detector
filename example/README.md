@@ -1,16 +1,27 @@
 # root_jailbreak_detector_example
 
-Demonstrates how to use the root_jailbreak_detector plugin.
+Demonstrates `root_jailbreak_detector` on a device.
 
-## Getting Started
+The app runs a check on startup and shows one of four outcomes — clean, compromised, unknown
+(the check failed), or unsupported platform — with a button to run it again. See
+[`lib/main.dart`](lib/main.dart) for the recommended calling pattern.
 
-This project is a starting point for a Flutter application.
+```console
+$ flutter run                      # on a connected device or simulator
+$ flutter test                     # widget tests, with the native side mocked
+$ flutter test integration_test    # exercises the real native code
+```
 
-A few resources to get you started if this is your first Flutter project:
+On the **iOS simulator** the app always shows "Device appears rooted or jailbroken". That is
+the intended answer, not a bug — an emulated environment is not one whose integrity the
+package will vouch for.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+On an **Android emulator** it depends on the system image: RootBeer flags test-keys images
+(AOSP, "Google APIs") but usually passes a "Google Play" image, so either colour is normal.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Either way the result proves nothing about the checks. Run it on a real device to see
+detection actually working — a healthy phone should come back clean.
+
+The **"Treat emulators as compromised"** switch at the bottom flips
+`RootJailbreakDetector(treatEmulatorAsCompromised: ...)` and re-runs the check, so you can
+watch a simulator move between red and green without editing any code.
